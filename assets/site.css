@@ -1,0 +1,18 @@
+:root { --max: 1100px; --fg:#111; --muted:#666; --line:#e9eaee; --bg:#fff; }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+a{color:inherit}
+header{padding:24px 16px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0}
+.wrap{max-width:var(--max);margin:0 auto}
+h1{margin:0 0 6px;font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:.2px}
+.lead{margin:0;color:var(--muted)}
+.grid{display:grid;gap:16px;padding:16px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;text-decoration:none;display:flex;flex-direction:column;transition:transform .06s ease}
+.card:focus-visible,.card:hover{transform:translateY(-1px)}
+.thumb{aspect-ratio:16/9;background:#f7f7f8;object-fit:cover;width:100%;display:block}
+.meta{padding:12px 12px 14px}
+.title{margin:0 0 6px;font-weight:600;font-size:16px}
+.desc{margin:0;color:var(--muted);font-size:14px;line-height:1.4}
+.tags{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+.badge{font-size:12px;background:#f2f4f7;border:1px solid #e6e8ee;border-radius:999px;padding:2px 8px}
+footer{padding:28px 16px;border-top:1px solid var(--line);color:#888}
