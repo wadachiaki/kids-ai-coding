@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kids AI Coding – Mini Games</title>
+<link rel="stylesheet" href="assets/site.css">
+
+<header>
+  <div class="wrap">
+    <h1>Kids AI Coding – Mini Games</h1>
+    <p class="lead">1ファイルHTMLで作る小さなゲームたち。新作は随時追加。</p>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <section id="grid" class="grid" aria-live="polite">
+    <p id="placeholder" class="lead" style="padding:8px 0 0 2px;">まだゲームがありません。最初のゲームを追加すると、ここにカードが並びます。</p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© <span id="y"></span> Kids AI Coding</div>
+</footer>
+
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+async function load() {
+  const grid = document.getElementById('grid');
+  try {
+    const res = await fetch('manifest.json', {cache:'no-store'});
+    if (!res.ok) throw new Error('manifest fetch failed');
+    const list = await res.json();
+    if (!Array.isArray(list) || list.length === 0) return;
+
+    list.sort((a,b)=> (b.updatedAt||'').localeCompare(a.updatedAt||''));
+    document.getElementById('placeholder')?.remove();
+
+    for (const g of list) {
+      const url = (g.url||'').endsWith('/') ? g.url : (g.url||'') + '/';
+      const a = document.createElement('a');
+      a.className = 'card';
+      a.href = url || '#';
+      a.setAttribute('aria-label', g.title || g.slug || 'game');
+
+      const img = document.createElement('img');
+      img.className = 'thumb';
+      img.alt = (g.title || g.slug || 'game') + ' thumbnail';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.src = g.thumbnail || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="%23f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="24" fill="%239aa0a6">No Thumbnail</text></svg>';
+
+      const meta = document.createElement('div'); meta.className = 'meta';
+      const h = document.createElement('h3'); h.className='title'; h.textContent = g.title || g.slug || 'Untitled';
+      const d = document.createElement('p'); d.className='desc'; d.textContent = g.description || '';
+      const tags = document.createElement('div'); tags.className='tags';
+      (g.tags||[]).slice(0,3).forEach(t => {
+        const span = document.createElement('span');
+        span.className = 'badge'; span.textContent = t;
+        tags.appendChild(span);
+      });
+
+      meta.append(h,d,tags);
+      a.append(img, meta);
+      grid.appendChild(a);
+    }
+  } catch (e) {
+    console.error(e);
+    grid.innerHTML = '<p class="lead">manifest.json の読み込みに失敗…</p>';
+  }
+}
+load();
+</script>
+</html>
